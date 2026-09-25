@@ -1,0 +1,20 @@
+baseURL = "https://simplepricelist.com/"
+languageCode = "en-us"
+title = "Simple Price List"
+disableKinds = ["taxonomy", "term", "rss"]
+enableRobotsTXT = true
+
+[params]
+  description = "One shared price list for your whole team. Upload a spreadsheet, invite your people, and look up any item by name, code or barcode in seconds."
+  # Where the "Sign in" / "Get started" buttons point.
+  appURL = "https://app.simplepricelist.com"
+  # Optional. Shown on the legal notice and in the footer when set.
+  contactEmail = ""
+  # Optional. Shows a "Source code" link in the footer when set.
+  repoURL = ""
+
+[markup.goldmark.renderer]
+  unsafe = false
+
+[sitemap]
+  changeFreq = "monthly"

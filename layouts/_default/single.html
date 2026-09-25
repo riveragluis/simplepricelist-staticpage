@@ -1,0 +1,13 @@
+{{ define "main" }}
+<article class="section">
+  <div class="wrap narrow prose">
+    <p class="eyebrow">{{ site.Title }}</p>
+    <h1>{{ .Title }}</h1>
+    {{ with .Lastmod }}<p class="small muted">Last updated {{ .Format "January 2, 2006" }}</p>{{ end }}
+    <div class="prose-body{{ if .Params.calloutFirst }} callout-first{{ end }}">
+      {{ .Content }}
+    </div>
+    {{ with site.Params.contactEmail }}<p class="muted">Questions about this page? Write to <a href="mailto:{{ . }}">{{ . }}</a>.</p>{{ end }}
+  </div>
+</article>
+{{ end }}

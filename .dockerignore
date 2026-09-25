@@ -1,0 +1,8 @@
+.git
+.gitignore
+public/
+resources/_gen/
+.hugo_build.lock
+Jenkinsfile
+docker-compose.yml
+README.md

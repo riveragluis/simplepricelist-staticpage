@@ -1,0 +1,51 @@
+# Editable copy for the home page. Icons refer to symbols in layouts/partials/icons.html.
+
+steps:
+  - title: Sign in
+    text: Use your Google or Microsoft account. Your organization is created on the spot and you become its admin. No forms, no passwords to remember.
+  - title: Load your prices
+    text: Upload the spreadsheet you already have (CSV or Excel), or add items one at a time. Each item gets a code, a name, a description, a price and an optional picture.
+  - title: Invite your team
+    text: Invite people by their email address. They can search and look up prices from any browser, but only admins can change them.
+
+features:
+  - icon: upload
+    title: Bulk upload
+    text: Import hundreds of items at once from CSV or Excel. Upload again later and existing codes are updated while new ones are added.
+  - icon: search
+    title: Fast search
+    text: Find any item by code, name or description, even from a partial word.
+  - icon: barcode
+    title: Barcode lookup
+    text: Type or scan an item code to jump straight to its price.
+  - icon: users
+    title: Admins and users
+    text: Admins manage prices and people. Everyone else gets read-only access, so nobody changes a price by accident.
+  - icon: shield
+    title: Separate organizations
+    text: Every organization has its own list. Other organizations never see yours.
+  - icon: download
+    title: Export any time
+    text: Download your whole list as a CSV whenever you want. Your data doesn't get locked in.
+
+usecases:
+  - title: Small shops and kiosks
+    text: Everyone at the counter quotes the same price, including the new hire on their first day.
+  - title: Market stalls and fairs
+    text: Look up prices on your phone while you stand in front of the customer.
+  - title: Wholesale and distribution
+    text: Share a single catalog with your sales team instead of mailing spreadsheets around.
+  - title: Workshops and services
+    text: Keep standard rates for parts and labor where everyone on the team can find them.
+
+faq:
+  - q: Do I need to install anything?
+    a: No. Simple Price List runs in the browser on phones, tablets and computers.
+  - q: What file format do I upload?
+    a: 'A CSV or Excel file with the columns <code>Item ID, Item Name, Description, Price, Image URL</code> and headers in the first row. Files can be up to 10&nbsp;MB.'
+  - q: Who can change prices?
+    a: Only admins. The first person to sign in becomes the admin of the organization and can promote other members later.
+  - q: Can I get my data out?
+    a: Yes. Export your full price list to CSV from the dashboard at any time. We recommend doing this regularly.
+  - q: Can I run it on critical business operations?
+    a: 'No. The service is offered as is, with no uptime, backup or privacy guarantees. Read the <a href="/legal/">legal notice</a> before you rely on it.'

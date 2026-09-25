@@ -1,0 +1,18 @@
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand" href="{{ "/" | relURL }}">
+        <svg class="brand-mark" aria-hidden="true"><use href="#i-logo"/></svg>
+        <span>{{ site.Title }}</span>
+      </a>
+      <p class="muted small">Provided as is, with no uptime, backup or privacy guarantee. Not for business-critical use.</p>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="{{ site.Params.appURL }}">Open the app</a>
+      <a href="{{ "/legal/" | relURL }}">Legal notice</a>
+      {{- with site.Params.repoURL }}<a href="{{ . }}">Source code</a>{{ end }}
+      {{- with site.Params.contactEmail }}<a href="mailto:{{ . }}">Contact</a>{{ end }}
+    </nav>
+  </div>
+  <div class="wrap small muted copyright">© {{ now.Year }} {{ site.Title }}</div>
+</footer>

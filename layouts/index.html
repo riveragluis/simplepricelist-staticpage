@@ -1,0 +1,138 @@
+{{ define "main" }}
+{{ $d := site.Data.home }}
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Shared price lists for small teams</p>
+      <h1>One price list.<br><span class="accent">Everyone quotes the same price.</span></h1>
+      <p class="lead">Upload the spreadsheet you already have, invite your team, and look up any item by name, code or barcode in seconds. It runs in any browser, and you sign in with Google or Microsoft.</p>
+      <div class="cta-row">
+        <a class="btn" href="{{ site.Params.appURL }}">Get started <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <p class="small muted hero-note"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-alert"/></svg> Best-effort service. Please read the <a href="{{ "/legal/" | relURL }}">legal notice</a> before relying on it.</p>
+    </div>
+
+    {{/* Illustrative mock of the dashboard, built in HTML so it stays crisp and themeable. */}}
+    <div class="mock" aria-hidden="true">
+      <div class="mock-bar"><span></span><span></span><span></span><div class="mock-url">app.simplepricelist.com</div></div>
+      <div class="mock-body">
+        <div class="mock-search"><svg class="icon icon-sm"><use href="#i-search"/></svg> cola<span class="caret"></span></div>
+        <table class="mock-table">
+          <thead><tr><th>Code</th><th>Item</th><th class="num">Price</th></tr></thead>
+          <tbody>
+            <tr><td class="code">750100</td><td>Cola 355 ml can</td><td class="num">$0.95</td></tr>
+            <tr class="hit"><td class="code">750101</td><td>Cola 600 ml bottle</td><td class="num">$1.45</td></tr>
+            <tr><td class="code">750102</td><td>Cola 2 L bottle</td><td class="num">$2.80</td></tr>
+            <tr><td class="code">750140</td><td>Cola zero 355 ml can</td><td class="num">$0.95</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mock-scan">
+        <svg class="icon"><use href="#i-barcode"/></svg>
+        <div><div class="small muted">Scanned 750101</div><strong>Cola 600 ml · $1.45</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <p class="eyebrow">How it works</p>
+      <h2>Up and running in three steps</h2>
+    </header>
+    <ol class="steps">
+      {{ range $i, $s := $d.steps }}
+      <li class="card step">
+        <span class="step-num">{{ add $i 1 }}</span>
+        <h3>{{ $s.title }}</h3>
+        <p>{{ $s.text }}</p>
+      </li>
+      {{ end }}
+    </ol>
+  </div>
+</section>
+
+<section id="features" class="section section-alt">
+  <div class="wrap">
+    <header class="section-head">
+      <p class="eyebrow">Features</p>
+      <h2>Only what a price list needs</h2>
+      <p class="muted">You won't find inventory, invoicing or a point-of-sale system here. It keeps one list of prices and lets the right people find them fast.</p>
+    </header>
+    <div class="features">
+      {{ range $d.features }}
+      <div class="feature">
+        <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-{{ .icon }}"/></svg></span>
+        <h3>{{ .title }}</h3>
+        <p>{{ .text }}</p>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap split">
+    <div>
+      <p class="eyebrow">Who it's for</p>
+      <h2>Built for teams that answer "how much is this?" all day</h2>
+      <ul class="usecases">
+        {{ range $d.usecases }}
+        <li><svg class="icon check" aria-hidden="true"><use href="#i-check"/></svg><div><strong>{{ .title }}</strong><span>{{ .text }}</span></div></li>
+        {{ end }}
+      </ul>
+    </div>
+    <div class="card code-card">
+      <div class="code-card-head"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-upload"/></svg> prices.csv</div>
+<pre><code><span class="hl">Item ID,Item Name,Description,Price,Image URL</span>
+750100,Cola 355 ml can,Single can,0.95,
+750101,Cola 600 ml bottle,PET bottle,1.45,
+750102,Cola 2 L bottle,Family size,2.80,
+880210,Rice 1 kg,Long grain,1.90,</code></pre>
+      <p class="small muted">Use the same five columns in CSV or Excel. If you upload the file again, codes that already exist are updated.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="notice">
+      <svg class="icon notice-icon" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div>
+        <h2>Before you rely on it</h2>
+        <p>Simple Price List is a small, best-effort service. <strong>It is not guaranteed for business-critical operations</strong>, and you should use it on the assumption that it <strong>can fail, be unavailable or lose data</strong> at any time. <strong>There is no privacy guarantee</strong>, so don't upload personal, confidential or sensitive information. Export your list regularly and keep your own copy.</p>
+        <a class="link-arrow" href="{{ "/legal/" | relURL }}">Read the full legal notice <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="section section-alt">
+  <div class="wrap narrow">
+    <header class="section-head">
+      <p class="eyebrow">FAQ</p>
+      <h2>Common questions</h2>
+    </header>
+    <div class="faq">
+      {{ range $d.faq }}
+      <details>
+        <summary>{{ .q }}</summary>
+        <p>{{ .a | safeHTML }}</p>
+      </details>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>Put your price list where your team can find it</h2>
+      <p>Sign in, upload your spreadsheet and share it in a few minutes.</p>
+      <a class="btn btn-light" href="{{ site.Params.appURL }}">Get started <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+  </div>
+</section>
+{{ end }}

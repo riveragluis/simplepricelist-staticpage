@@ -1,0 +1,14 @@
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="{{ "/" | relURL }}">
+      <svg class="brand-mark" aria-hidden="true"><use href="#i-logo"/></svg>
+      <span>{{ site.Title }}</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="{{ "/#how" | relURL }}">How it works</a>
+      <a href="{{ "/#features" | relURL }}">Features</a>
+      <a href="{{ "/#faq" | relURL }}">FAQ</a>
+      <a class="btn btn-small" href="{{ site.Params.appURL }}">Sign in</a>
+    </nav>
+  </div>
+</header>

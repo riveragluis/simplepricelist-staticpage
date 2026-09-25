@@ -1,0 +1,21 @@
+# Portainer stack for the Simple Price List home page.
+# SITE_IMAGE: set to your registry image (e.g. registry.homelab.lan/simplepricelist-site:latest)
+#             when Jenkins pushes to a registry; the default uses the image built on this host.
+# SITE_PORT:  host port to publish (the app already uses 8080).
+services:
+  site:
+    image: ${SITE_IMAGE:-simplepricelist-site:latest}
+    container_name: simplepricelist-site
+    restart: unless-stopped
+    ports:
+      - "${SITE_PORT:-8081}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
