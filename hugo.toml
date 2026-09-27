@@ -9,7 +9,7 @@ enableRobotsTXT = true
   # Where the "Sign in" / "Get started" buttons point.
   appURL = "https://app.simplepricelist.com"
   # Optional. Shown on the legal notice and in the footer when set.
-  contactEmail = ""
+  contactEmail = "hello@simplepricelist.com"
   # Optional. Shows a "Source code" link in the footer when set.
   repoURL = ""
 

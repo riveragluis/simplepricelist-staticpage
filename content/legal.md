@@ -39,7 +39,7 @@ Only store information that you would be comfortable having exposed.
 
 ## 4. Third-party sign-in
 
-Sign-in is handled by third-party identity providers (Google and Microsoft). Their own terms and privacy policies apply to your use of their services. The Service isn't affiliated with or endorsed by those providers.
+Sign-in is handled by a third-party identity provider (Google). Its own terms and privacy policy apply to your use of its services. The Service isn't affiliated with or endorsed by Google.
 
 ## 5. Your responsibilities
 

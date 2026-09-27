@@ -2,7 +2,7 @@
 
 steps:
   - title: Sign in
-    text: Use your Google or Microsoft account. Your organization is created on the spot and you become its admin. No forms, no passwords to remember.
+    text: Use your Google account. Your organization is created on the spot and you become its admin. No forms, no passwords to remember.
   - title: Load your prices
     text: Upload the spreadsheet you already have (CSV or Excel), or add items one at a time. Each item gets a code, a name, a description, a price and an optional picture.
   - title: Invite your team
