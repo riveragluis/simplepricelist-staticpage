@@ -1,10 +1,18 @@
 # Portainer stack for the Simple Price List home page.
-# SITE_IMAGE: set to your registry image (e.g. registry.homelab.lan/simplepricelist-site:latest)
-#             when Jenkins pushes to a registry; the default uses the image built on this host.
-# SITE_PORT:  host port to publish (the app already uses 8080).
+# By default the image is built from this repo's Dockerfile on every deploy, so a
+# Portainer "Repository" stack pointing at GitHub picks up each new commit.
+# SITE_IMAGE:       image name to tag the build with, or a registry image to pull
+#                   (e.g. registry.homelab.lan/simplepricelist-site:latest).
+# SITE_PULL_POLICY: build (default) rebuilds from the repo on every deploy;
+#                   missing uses an image already on the host (Jenkins docker-compose mode);
+#                   always pulls SITE_IMAGE from a registry (Jenkins portainer-webhook mode).
+# SITE_PORT:        host port to publish (the app already uses 8080).
 services:
   site:
+    build:
+      context: .
     image: ${SITE_IMAGE:-simplepricelist-site:latest}
+    pull_policy: ${SITE_PULL_POLICY:-build}
     container_name: simplepricelist-site
     restart: unless-stopped
     ports:

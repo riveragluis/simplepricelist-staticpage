@@ -139,6 +139,8 @@ none: build and test only.'''
             steps {
                 sh '''
                     export SITE_IMAGE="$IMAGE_REPO:$IMAGE_TAG"
+                    # Use the image built and tested above instead of rebuilding it.
+                    export SITE_PULL_POLICY=missing
                     docker compose -p "$STACK_NAME" -f docker-compose.yml up -d --remove-orphans
 
                     # Wait for Docker's health check to report the new container as healthy.

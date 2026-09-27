@@ -18,7 +18,7 @@ No themes, no Node, no JavaScript. The site is plain Hugo templates plus one CSS
 ├── static/favicon.svg         # Same logo as the app
 ├── deploy/nginx.conf          # nginx config: caching, gzip, security headers, /healthz
 ├── Dockerfile                 # Hugo build stage, then nginx-unprivileged runtime
-├── docker-compose.yml         # Portainer stack definition
+├── docker-compose.yml         # Portainer stack definition (builds from the Dockerfile)
 └── Jenkinsfile                # Build, smoke test, push, deploy
 ```
 
@@ -44,7 +44,26 @@ docker build -t simplepricelist-site .
 docker run --rm -p 8081:8080 simplepricelist-site   # http://localhost:8081
 ```
 
+## Deploying from GitHub with Portainer (recommended)
+
+Portainer can clone this repository and build the image itself, so pushing to `master` is all it takes to deploy. You don't need Jenkins or a registry.
+
+1. If a `simplepricelist-site` stack or container already exists (for example one started by Jenkins), remove it first. The new stack uses the same container name.
+2. In Portainer, go to **Stacks → Add stack → Repository** and fill in:
+   - **Name:** `simplepricelist-site`
+   - **Repository URL:** `https://github.com/riveragluis/simplepricelist-staticpage`
+   - **Authentication:** needed only if the repo is private. Use your GitHub username and a personal access token with read access to the repository contents.
+   - **Repository reference:** `refs/heads/master`
+   - **Compose path:** `docker-compose.yml`
+3. Turn on **GitOps updates**. Choose **Polling** (for example every 5 minutes) to redeploy automatically after each push, or **Webhook** if you'd rather trigger deploys yourself, for example from GitHub Actions.
+4. Set environment variables only if you need to. `SITE_PORT` defaults to `8081`; see [Stack settings](#stack-settings).
+5. Deploy the stack.
+
+On each deploy, `pull_policy: build` makes Portainer rebuild the image from the `Dockerfile`, so new commits show up. A build takes under a minute. The Docker host needs internet access to pull the Alpine and nginx base images and download Hugo.
+
 ## Deploying with Jenkins and Portainer
+
+Use this instead of the GitHub setup above, or run Jenkins with `DEPLOY_MODE=none` just for its smoke tests. Don't let both deploy the same stack.
 
 The `Jenkinsfile` does all of the work. The Jenkins agent only needs the Docker CLI with access to a Docker daemon, plus the `docker compose` plugin or `curl` depending on the deploy mode.
 
@@ -55,8 +74,8 @@ The `Jenkinsfile` does all of the work. The Jenkins agent only needs the Docker 
 
 | Mode | When to use it | Setup |
 |------|----------------|-------|
-| `docker-compose` (default) | The Jenkins agent talks to the same Docker host that Portainer manages. | None. The stack `simplepricelist-site` is created or updated with `docker compose` and appears in Portainer's stack list. Portainer marks it as created outside Portainer, so you have limited control over it there. |
-| `portainer-webhook` | Portainer should own the stack, and images go through a registry. | Push the image to a registry (set `REGISTRY`). In Portainer, create a stack from this repo's `docker-compose.yml` with the environment variable `SITE_IMAGE=<registry>/simplepricelist-site:latest`. Enable the webhook with **re-pull image**, and save the webhook URL in Jenkins as a *Secret text* credential named `portainer-simplepricelist-site-webhook`. |
+| `docker-compose` (default) | The Jenkins agent talks to the same Docker host that Portainer manages. | None. The stack `simplepricelist-site` is created or updated with `docker compose`, using the image Jenkins just built and tested (the pipeline sets `SITE_PULL_POLICY=missing`), and appears in Portainer's stack list. Portainer marks it as created outside Portainer, so you have limited control over it there. |
+| `portainer-webhook` | Portainer should own the stack, and images go through a registry. | Push the image to a registry (set `REGISTRY`). In Portainer, create a stack from this repo's `docker-compose.yml` with the environment variables `SITE_IMAGE=<registry>/simplepricelist-site:latest` and `SITE_PULL_POLICY=always`. Enable the webhook with **re-pull image**, and save the webhook URL in Jenkins as a *Secret text* credential named `portainer-simplepricelist-site-webhook`. |
 | `none` | You only want CI. | None. |
 
 ### Jenkins job setup
@@ -69,7 +88,8 @@ The `Jenkinsfile` does all of the work. The Jenkins agent only needs the Docker 
 
 | Variable | Default | Meaning |
 |----------|---------|---------|
-| `SITE_IMAGE` | `simplepricelist-site:latest` | Image to run |
+| `SITE_IMAGE` | `simplepricelist-site:latest` | Name to tag the built image with, or a registry image to pull |
+| `SITE_PULL_POLICY` | `build` | `build` rebuilds from the repo on every deploy. `missing` uses an image already on the host. `always` pulls `SITE_IMAGE` from a registry. |
 | `SITE_PORT` | `8081` | Host port (the app already uses 8080) |
 
 Put your reverse proxy (Nginx Proxy Manager, Traefik, Caddy, …) in front of `SITE_PORT` for `simplepricelist.com` with TLS. The container answers `GET /healthz` for health checks.
