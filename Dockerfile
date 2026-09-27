@@ -10,16 +10,25 @@ ARG TARGETARCH
 # Optional override, e.g. http://homelab.lan:8081/ for an internal preview.
 ARG SITE_BASE_URL=
 
-RUN apk add --no-cache ca-certificates wget \
- && ARCH="${TARGETARCH:-amd64}" \
- && FILE="hugo_${HUGO_VERSION}_linux-${ARCH}.tar.gz" \
- && cd /tmp \
- && wget -q "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/${FILE}" \
- && wget -q "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_${HUGO_VERSION}_checksums.txt" \
- && grep " ${FILE}\$" "hugo_${HUGO_VERSION}_checksums.txt" | sha256sum -c - \
- && tar -xzf "${FILE}" -C /usr/local/bin hugo \
- && rm -f /tmp/hugo_* \
- && hugo version
+# The Alpine base image already has wget (with HTTPS) and CA certificates, so no
+# packages are installed. Each step fails with its own message so a Portainer
+# build error shows what went wrong.
+RUN set -eu; \
+    ARCH="${TARGETARCH:-amd64}"; \
+    FILE="hugo_${HUGO_VERSION}_linux-${ARCH}.tar.gz"; \
+    BASE="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}"; \
+    cd /tmp; \
+    wget -O "${FILE}" "${BASE}/${FILE}" \
+      || { echo "ERROR: could not download ${BASE}/${FILE} (no internet access from the build, or no Hugo release for architecture '${ARCH}')" >&2; exit 1; }; \
+    wget -O checksums.txt "${BASE}/hugo_${HUGO_VERSION}_checksums.txt" \
+      || { echo "ERROR: could not download the Hugo checksums file" >&2; exit 1; }; \
+    grep " ${FILE}\$" checksums.txt > hugo.sha256 \
+      || { echo "ERROR: ${FILE} is not listed in the Hugo checksums file" >&2; exit 1; }; \
+    sha256sum -c hugo.sha256 \
+      || { echo "ERROR: checksum mismatch for ${FILE}" >&2; exit 1; }; \
+    tar -xzf "${FILE}" -C /usr/local/bin hugo; \
+    rm -f /tmp/hugo_* /tmp/checksums.txt /tmp/hugo.sha256; \
+    hugo version
 
 WORKDIR /src
 COPY . .
