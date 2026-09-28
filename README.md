@@ -59,7 +59,7 @@ Portainer can clone this repository and build the image itself, so pushing to `m
 4. Set environment variables only if you need to. `SITE_PORT` defaults to `8081`; see [Stack settings](#stack-settings).
 5. Deploy the stack.
 
-On each deploy, `pull_policy: build` makes Portainer rebuild the image from the `Dockerfile`, so new commits show up. A build takes under a minute. The Docker host needs internet access to pull the Alpine and nginx base images and download Hugo.
+On each deploy, `pull_policy: build` makes Portainer rebuild the image from the `Dockerfile`, so new commits show up. A build takes under a minute. The Docker host needs internet access to pull the Hugo (`ghcr.io/gohugoio/hugo`) and nginx base images. The build itself downloads nothing.
 
 ## Deploying with Jenkins and Portainer
 
@@ -67,7 +67,7 @@ Use this instead of the GitHub setup above, or run Jenkins with `DEPLOY_MODE=non
 
 The `Jenkinsfile` does all of the work. The Jenkins agent only needs the Docker CLI with access to a Docker daemon, plus the `docker compose` plugin or `curl` depending on the deploy mode.
 
-1. **Build image:** Hugo is downloaded inside the Docker build and its checksum is verified. It renders the site, which is then copied into `nginxinc/nginx-unprivileged`.
+1. **Build image:** the official Hugo image (`ghcr.io/gohugoio/hugo`) renders the site, which is then copied into `nginxinc/nginx-unprivileged`.
 2. **Smoke test:** the image is started read-only, and the pipeline checks `/healthz`, the home page, the legal notice (including the disclaimer text) and the sitemap.
 3. **Push image:** this stage runs only when `REGISTRY` is set.
 4. **Deploy:** choose one mode with `DEPLOY_MODE`:
